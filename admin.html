@@ -501,14 +501,12 @@ function sw(el){
 }
 
 /* ── 배경 이미지 ── */
-document.getElementById('bgFile').addEventListener('change',e=>{
+document.getElementById('bgFile').addEventListener('change',async e=>{
   const f=e.target.files[0]; if(!f) return;
-  const r=new FileReader(); r.onload=ev=>{
-    D.bgImage=ev.target.result;
-    const p=document.getElementById('bgPrev');
-    p.src=D.bgImage; p.style.display='block';
-    document.getElementById('bgHint').style.display='none';
-  }; r.readAsDataURL(f);
+  D.bgImage=await compressImage(f,1920,1080,0.82);
+  const p=document.getElementById('bgPrev');
+  p.src=D.bgImage; p.style.display='block';
+  document.getElementById('bgHint').style.display='none';
 });
 document.getElementById('bgOpSlider').addEventListener('input',function(){
   D.bgOpacity=parseFloat(this.value);
@@ -552,10 +550,32 @@ function addKr(){D.keyrings=D.keyrings||[];D.keyrings.push({img:'',label:'',size
 function dlKr(i){D.keyrings.splice(i,1);renderKr();}
 function mvKr(i,d){const j=i+d,a=D.keyrings;if(j<0||j>=a.length)return;[a[i],a[j]]=[a[j],a[i]];renderKr();}
 function triggerKrImg(i){document.querySelectorAll('.kr-preview input')[i].click();}
-function loadKrImg(i,input){
+async function loadKrImg(i,input){
   const f=input.files[0];if(!f)return;
-  const r=new FileReader();r.onload=ev=>{D.keyrings[i].img=ev.target.result;renderKr();};
-  r.readAsDataURL(f);
+  // PNG는 투명도 보존 (canvas toDataURL png), 나머지는 JPEG 압축
+  if(f.type==='image/png'){
+    D.keyrings[i].img=await compressPng(f,400,400);
+  } else {
+    D.keyrings[i].img=await compressImage(f,400,400,0.85);
+  }
+  renderKr();
+}
+function compressPng(file,maxW,maxH){
+  return new Promise(resolve=>{
+    const img=new Image();
+    const url=URL.createObjectURL(file);
+    img.onload=()=>{
+      URL.revokeObjectURL(url);
+      let w=img.naturalWidth,h=img.naturalHeight;
+      const ratio=Math.min(maxW/w,maxH/h,1);
+      w=Math.round(w*ratio);h=Math.round(h*ratio);
+      const canvas=document.createElement('canvas');
+      canvas.width=w;canvas.height=h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      resolve(canvas.toDataURL('image/png'));
+    };
+    img.src=url;
+  });
 }
 
 /* ── 게시판 ── */
@@ -608,14 +628,12 @@ function cardHTML(bi,ii,it){
     </div>
   </div>`;
 }
-function loadCardImg(bi,ii,input){
+async function loadCardImg(bi,ii,input){
   const f=input.files[0];if(!f)return;
-  const r=new FileReader();r.onload=ev=>{
-    D.boards[bi].items[ii].img=ev.target.result;
-    D.boards[bi].items[ii].imgPos={x:50,y:50,z:100};
-    renderBoards();
-    openPosModal('boards',bi,ii);
-  };r.readAsDataURL(f);
+  D.boards[bi].items[ii].img=await compressImage(f,800,1067,0.80);
+  D.boards[bi].items[ii].imgPos={x:50,y:50,z:100};
+  renderBoards();
+  openPosModal('boards',bi,ii);
 }
 
 /* ── 이미지 위치 조정 모달 ── */
@@ -748,7 +766,7 @@ function renderContact(){
       </div>
     </div>`).join('');
 }
-function loadContactImg(ii,input){const f=input.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{D.contact[ii].img=ev.target.result;renderContact();};r.readAsDataURL(f);}
+async function loadContactImg(ii,input){const f=input.files[0];if(!f)return;D.contact[ii].img=await compressImage(f,400,400,0.85);renderContact();}
 function addContact(){D.contact.push({name:'플랫폼',desc:'',badge:'',img:''});renderContact();}
 function dlContact(ii){D.contact.splice(ii,1);renderContact();}
 function mvContact(ii,d){const j=ii+d;if(j<0||j>=D.contact.length)return;[D.contact[ii],D.contact[j]]=[D.contact[j],D.contact[ii]];renderContact();}
@@ -786,14 +804,12 @@ function mvM(i,d){const j=i+d;if(j<0||j>=D.meta.length)return;[D.meta[i],D.meta[
 function dlM(i){D.meta.splice(i,1);renderMeta();}
 
 /* ── 아바타 ── */
-document.getElementById('avFile').addEventListener('change',e=>{
+document.getElementById('avFile').addEventListener('change',async e=>{
   const f=e.target.files[0];if(!f)return;
-  const r=new FileReader();r.onload=ev=>{
-    D.avatar=ev.target.result;
-    const p=document.getElementById('avPrev');p.src=D.avatar;p.style.display='block';
-    document.querySelector('.av-wrap .av-icon').style.display='none';
-    document.getElementById('avHint').style.display='none';
-  };r.readAsDataURL(f);
+  D.avatar=await compressImage(f,400,400,0.85);
+  const p=document.getElementById('avPrev');p.src=D.avatar;p.style.display='block';
+  document.querySelector('.av-wrap .av-icon').style.display='none';
+  document.getElementById('avHint').style.display='none';
 });
 function clearAv(){D.avatar='';document.getElementById('avPrev').style.display='none';
   document.querySelector('.av-wrap .av-icon').style.display='';
@@ -891,6 +907,33 @@ function loadForm(){
   renderMeta(); renderTheme(); renderPresets();
 }
 loadForm();
+/* ── 이미지 압축 유틸 ──
+   maxW/maxH: 최대 픽셀, quality: JPEG 품질(0~1)
+   용도별 기본값:
+     배경: 1920×1080, q0.82
+     카드 썸네일: 800×1067(3:4), q0.80
+     키링: 400×400, q0.85
+     아바타: 400×400, q0.85
+*/
+function compressImage(file, maxW, maxH, quality){
+  return new Promise(resolve=>{
+    const img=new Image();
+    const url=URL.createObjectURL(file);
+    img.onload=()=>{
+      URL.revokeObjectURL(url);
+      let w=img.naturalWidth, h=img.naturalHeight;
+      const ratio=Math.min(maxW/w, maxH/h, 1); // 절대 확대 안 함
+      w=Math.round(w*ratio); h=Math.round(h*ratio);
+      const canvas=document.createElement('canvas');
+      canvas.width=w; canvas.height=h;
+      const ctx=canvas.getContext('2d');
+      ctx.drawImage(img,0,0,w,h);
+      resolve(canvas.toDataURL('image/jpeg', quality));
+    };
+    img.src=url;
+  });
+}
+
 function exportHTML(){
   collect();
   var snap = JSON.parse(JSON.stringify(D));
