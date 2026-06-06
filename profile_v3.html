@@ -87,17 +87,21 @@ body{background:var(--bg);color:var(--td);min-height:100vh;
 .main{grid-column:2;min-width:0}
 .sec{margin-bottom:4.5rem;padding-bottom:4.5rem;border-bottom:1px solid var(--ll)}
 .sec:last-child{border-bottom:none;margin-bottom:0}
-.sec-label{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.22em;
+.sec-label{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.2em;
   text-transform:uppercase;color:var(--tu);margin-bottom:1.75rem;
   display:flex;align-items:center;gap:14px}
-.sec-label::before{content:'';width:16px;height:1px;background:currentColor;flex-shrink:0}
+.sec-label::before{content:'';width:20px;height:1px;background:currentColor;flex-shrink:0}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--ll)}
 .bio{font-family:'Noto Serif KR','Spectral',serif;font-weight:300;font-size:1.05rem;
   line-height:2.05;color:var(--tm);max-width:500px;white-space:pre-line}
 /* board — card grid */
-.board{margin-bottom:3rem}.board:last-child{margin-bottom:0}
-.board-title{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:400;
-  color:var(--td);margin-bottom:1.25rem;padding-bottom:.6rem;
-  border-bottom:1px solid var(--line);letter-spacing:.02em}
+.board{margin-bottom:3.5rem;padding-bottom:3.5rem;border-bottom:1px solid var(--ll)}
+.board:last-child{border-bottom:none;padding-bottom:0;margin-bottom:0}
+.board-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:400;
+  color:var(--td);margin-bottom:1.25rem;padding-bottom:.65rem;
+  border-bottom:1px solid var(--line);letter-spacing:.03em;
+  display:flex;align-items:center;gap:10px}
+.board-title::before{content:'';width:12px;height:1px;background:var(--line);flex-shrink:0}
 .blist{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:14px}
 .bitem{display:flex;flex-direction:column;background:var(--paper);
   border:1px solid var(--ll);overflow:hidden;
@@ -109,12 +113,12 @@ body{background:var(--bg);color:var(--td);min-height:100vh;
 .bthumb img{width:100%;height:100%;object-fit:cover;
   transition:transform .35s ease}
 .bitem:hover .bthumb img{transform:scale(1.04)}
-.binfo{padding:.7rem .75rem .8rem;display:flex;flex-direction:column;gap:4px;flex:1}
+.binfo{padding:.75rem .8rem .85rem;display:flex;flex-direction:column;gap:5px;flex:1}
 .bname{font-family:'Noto Serif KR','Spectral',serif;font-weight:400;
-  font-size:.88rem;color:var(--td);line-height:1.35}
-.bdesc{font-size:.75rem;color:var(--tu);line-height:1.5}
-.bbadge{font-family:'DM Mono',monospace;font-size:.56rem;letter-spacing:.07em;
-  padding:2px 7px;border:1px solid var(--line);color:var(--tu);
+  font-size:.92rem;color:var(--td);line-height:1.35;letter-spacing:.01em}
+.bdesc{font-size:.76rem;color:var(--tu);line-height:1.55;font-weight:300}
+.bbadge{font-family:'DM Mono',monospace;font-size:.57rem;letter-spacing:.08em;
+  padding:2px 8px;border:1px solid var(--line);color:var(--tu);
   white-space:nowrap;align-self:flex-start;margin-top:auto;padding-top:6px}
 /* no-image bitem: horizontal fallback */
 .bitem.no-img{flex-direction:row;align-items:center;gap:.75rem;padding:.75rem}
@@ -134,9 +138,9 @@ body{background:var(--bg);color:var(--td);min-height:100vh;
 /* meta */
 .mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
 .mitem{padding:1.1rem 1.5rem 1.1rem 0;border-bottom:1px solid var(--ll)}
-.mkey{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--tf);margin-bottom:.35rem}
-.mval{font-family:'Noto Serif KR','Spectral',serif;font-weight:400;font-size:.95rem;color:var(--td)}
+.mkey{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--tf);margin-bottom:.4rem}
+.mval{font-family:'Noto Serif KR','Spectral',serif;font-weight:400;font-size:.95rem;color:var(--td);line-height:1.4}
 /* mobile */
 @media(max-width:767px){
   .wrap{display:block;padding:0}
@@ -257,7 +261,7 @@ function renderKeyrings(keyrings){
     el.innerHTML=`
       <div class="keyring-string"></div>
       <div class="keyring-ring"></div>
-      <img class="keyring-img" src="${kr.img}" width="${kr.size||80}" alt="${kr.label||''}">
+      <img class="keyring-img" src="${kr.img}" width="${kr.size||120}" alt="${kr.label||''}">
       ${kr.label?`<div style="font-family:'DM Mono',monospace;font-size:.55rem;letter-spacing:.08em;color:var(--tu);margin-top:5px;text-align:center">${kr.label}</div>`:''}
     `;
     makeDraggable(el,i,pos);

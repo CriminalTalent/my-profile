@@ -56,9 +56,10 @@ body{background:var(--bg);color:var(--t);font-family:'Noto Serif KR',serif;
 .ni.active{color:var(--ac);border-left-color:var(--ac);background:var(--s2)}
 .content{padding:2.75rem 2.75rem 6rem}
 .panel{display:none}.panel.active{display:block}
-.panel-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;
-  font-weight:400;color:var(--t);margin-bottom:.3rem}
-.panel-desc{font-size:.78rem;font-weight:300;color:var(--tf);margin-bottom:2.25rem;line-height:1.6}
+.panel-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;
+  font-weight:400;color:var(--t);margin-bottom:.3rem;letter-spacing:.01em}
+.panel-desc{font-size:.76rem;font-weight:300;color:var(--tf);margin-bottom:2rem;line-height:1.6;
+  padding-bottom:1.5rem;border-bottom:1px solid var(--line)}
 .field{margin-bottom:1.4rem}
 .fl{font-family:'DM Mono',monospace;font-size:.6rem;font-weight:300;
   letter-spacing:.15em;text-transform:uppercase;color:var(--tf);
@@ -181,10 +182,11 @@ hr.dv{border:none;border-top:1px solid var(--line);margin:2rem 0}
 .pos-zoom input{flex:1;accent-color:var(--ac)}
 .pc-body{padding:8px;display:flex;flex-direction:column;gap:5px;flex:1}
 .pc-in{background:var(--s);border:1px solid var(--ll);color:var(--t);
-  font-family:'Noto Serif KR',serif;font-weight:300;font-size:.78rem;
-  padding:4px 7px;outline:none;width:100%;transition:border-color .15s}
+  font-family:'Noto Serif KR',serif;font-weight:300;font-size:.82rem;
+  padding:5px 8px;outline:none;width:100%;transition:border-color .15s}
 .pc-in:focus{border-color:var(--ac)}
-.pc-in.mono{font-family:'DM Mono',monospace;font-size:.68rem}
+.pc-in.mono{font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.04em}
+.pc-in::placeholder{color:var(--tf)}
 .pc-foot{display:flex;border-top:1px solid var(--ll)}
 .pc-act{flex:1;background:none;border:none;color:var(--tf);padding:5px;cursor:pointer;
   font-size:.65rem;font-family:'DM Mono',monospace;transition:all .12s;border-right:1px solid var(--ll)}
@@ -237,7 +239,11 @@ hr.dv{border:none;border-top:1px solid var(--line);margin:2rem 0}
 .ciwrap{position:relative;flex:1}
 .ciwrap input{width:100%}
 .creal{position:absolute;left:0;top:0;width:0;height:0;opacity:0}
-.pset-grid{display:flex;flex-wrap:wrap;gap:7px;margin-top:.5rem}
+.pset-grid{display:flex;flex-wrap:wrap;gap:7px;margin-top:.5rem;max-height:280px;overflow-y:auto;padding-right:4px}
+.pset-grid::-webkit-scrollbar{width:3px}.pset-grid::-webkit-scrollbar-thumb{background:var(--line)}
+.pset-section-lbl{width:100%;font-family:'DM Mono',monospace;font-size:.55rem;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--tf);padding:.5rem 0 .2rem;border-top:1px solid var(--line);margin-top:4px}
+.pset-section-lbl:first-child{border-top:none;margin-top:0;padding-top:0}
 .pset-btn{font-family:'DM Mono',monospace;font-size:.65rem;font-weight:300;
   letter-spacing:.06em;padding:6px 14px;border:1px solid var(--line);
   background:var(--s);color:var(--tm);cursor:pointer;transition:all .15s;
@@ -467,12 +473,22 @@ function uid(){return 'b'+Date.now()+Math.random().toString(36).slice(2,6);}
 
 const TLAB={bg:'배경색',paper:'카드/배경',line:'구분선',textDark:'주 텍스트',textMid:'보조 텍스트',textMuted:'흐린 텍스트',accent:'강조색'};
 const PRESETS=[
+  // ── 라이트 ──
   {label:'웜 그레이',c:['#f0eeea','#f7f5f1','#6b5f50'],t:{bg:'#f0eeea',paper:'#f7f5f1',line:'#dedad3',textDark:'#1e1c18',textMid:'#5c5850',textMuted:'#9c9890',accent:'#6b5f50'}},
   {label:'크림 세피아',c:['#f4f0e8','#faf7f0','#8a6a45'],t:{bg:'#f4f0e8',paper:'#faf7f0',line:'#e0d8c8',textDark:'#2a2018',textMid:'#685840',textMuted:'#a89878',accent:'#8a6a45'}},
+  {label:'올드 페이퍼',c:['#f2ede4','#faf6ed','#7a6040'],t:{bg:'#f2ede4',paper:'#faf6ed',line:'#ddd5c0',textDark:'#2a2010',textMid:'#6a5838',textMuted:'#a89868',accent:'#7a6040'}},
   {label:'슬레이트 블루',c:['#eceff3','#f4f6f9','#4a6080'],t:{bg:'#eceff3',paper:'#f4f6f9',line:'#d4dae4',textDark:'#181e28',textMid:'#4a5568',textMuted:'#8898a8',accent:'#4a6080'}},
+  {label:'라벤더 미스트',c:['#f0eef6','#f7f5fc','#6858a0'],t:{bg:'#f0eef6',paper:'#f7f5fc',line:'#ddd8ee',textDark:'#1e1828',textMid:'#584870',textMuted:'#9888c0',accent:'#6858a0'}},
+  {label:'로즈 쿼츠',c:['#f5eeee','#fcf6f6','#905858'],t:{bg:'#f5eeee',paper:'#fcf6f6',line:'#e8d8d8',textDark:'#281818',textMid:'#705050',textMuted:'#b89090',accent:'#905858'}},
   {label:'세이지 그린',c:['#eef1ec','#f5f7f3','#4a6850'],t:{bg:'#eef1ec',paper:'#f5f7f3',line:'#d4dcd0',textDark:'#1a2018',textMid:'#485848',textMuted:'#889888',accent:'#4a6850'}},
+  {label:'민트 포그',c:['#eaf2f0','#f3faf8','#3a7868'],t:{bg:'#eaf2f0',paper:'#f3faf8',line:'#cce4de',textDark:'#101e1c',textMid:'#386058',textMuted:'#78a89e',accent:'#3a7868'}},
+  // ── 다크 ──
   {label:'다크 먹',c:['#141312','#1c1b19','#c9b99a'],t:{bg:'#141312',paper:'#1c1b19',line:'#353230',textDark:'#e2dfd8',textMid:'#928f87',textMuted:'#504e48',accent:'#c9b99a'}},
   {label:'차콜 로즈',c:['#1a1618','#221e20','#b89898'],t:{bg:'#1a1618',paper:'#221e20',line:'#352e30',textDark:'#dfd8da',textMid:'#907e80',textMuted:'#504448',accent:'#b89898'}},
+  {label:'딥 네이비',c:['#10121a','#181c28','#8898c8'],t:{bg:'#10121a',paper:'#181c28',line:'#282e40',textDark:'#d8dce8',textMid:'#7880a0',textMuted:'#404858',accent:'#8898c8'}},
+  {label:'다크 포레스트',c:['#101510','#181e18','#88a878'],t:{bg:'#101510',paper:'#181e18',line:'#28342a',textDark:'#d8e0d4',textMid:'#6a806a',textMuted:'#384038',accent:'#88a878'}},
+  {label:'나이트 퍼플',c:['#130f1a','#1c1828','#a888d8'],t:{bg:'#130f1a',paper:'#1c1828',line:'#302840',textDark:'#e0d8f0',textMid:'#806898',textMuted:'#483858',accent:'#a888d8'}},
+  {label:'다크 버건디',c:['#180f10','#221618','#c87878'],t:{bg:'#180f10',paper:'#221618',line:'#382025',textDark:'#e8d8d8',textMid:'#906868',textMuted:'#503838',accent:'#c87878'}},
 ];
 
 let D=loadData();
@@ -521,9 +537,9 @@ function renderKr(){
       </div>
       <div class="kr-size-row">
         <label>크기</label>
-        <input type="range" min="40" max="160" value="${kr.size||80}"
+        <input type="range" min="60" max="240" value="${kr.size||120}"
           oninput="D.keyrings[${i}].size=+this.value;this.nextElementSibling.textContent=this.value+'px'">
-        <span class="kr-size-val">${kr.size||80}px</span>
+        <span class="kr-size-val">${kr.size||120}px</span>
       </div>
       <div class="kr-foot">
         <button class="kr-act" onclick="mvKr(${i},-1)">◀</button>
@@ -532,7 +548,7 @@ function renderKr(){
       </div>
     </div>`).join('');
 }
-function addKr(){D.keyrings=D.keyrings||[];D.keyrings.push({img:'',label:'',size:80});renderKr();}
+function addKr(){D.keyrings=D.keyrings||[];D.keyrings.push({img:'',label:'',size:120});renderKr();}
 function dlKr(i){D.keyrings.splice(i,1);renderKr();}
 function mvKr(i,d){const j=i+d,a=D.keyrings;if(j<0||j>=a.length)return;[a[i],a[j]]=[a[j],a[i]];renderKr();}
 function triggerKrImg(i){document.querySelectorAll('.kr-preview input')[i].click();}
@@ -799,10 +815,14 @@ function renderTheme(){
 function syncC(k,v){if(/^#[0-9a-fA-F]{6}$/.test(v)){D.theme[k]=v;document.getElementById('cp-'+k).style.background=v;document.getElementById('cr-'+k).value=v;}}
 function syncP(k,v){D.theme[k]=v;document.getElementById('ct-'+k).value=v;document.getElementById('cp-'+k).style.background=v;}
 function renderPresets(){
-  document.getElementById('presets').innerHTML=PRESETS.map((p,i)=>`
-    <button class="pset-btn" onclick="applyPreset(${i})">
+  let html='<div class="pset-section-lbl">라이트</div>';
+  PRESETS.forEach((p,i)=>{
+    if(i===8) html+='<div class="pset-section-lbl">다크</div>';
+    html+=`<button class="pset-btn" onclick="applyPreset(${i})">
       <div class="pswatch">${p.c.map(c=>`<span style="background:${c}"></span>`).join('')}</div>
-      ${p.label}</button>`).join('');
+      ${p.label}</button>`;
+  });
+  document.getElementById('presets').innerHTML=html;
 }
 function applyPreset(i){D.theme=Object.assign({},PRESETS[i].t);renderTheme();}
 
@@ -813,6 +833,29 @@ function collect(){
   D.status=document.getElementById('f-status').value;
   D.lastEdit=document.getElementById('f-last').value;
   D.bio=document.getElementById('f-bio').value;
+  // boards: sync title from DOM, preserve img/imgPos/items already in D
+  document.querySelectorAll('#boardsWrap .board-block').forEach((block,bi)=>{
+    if(!D.boards[bi]) return;
+    const inp=block.querySelector('.board-name-input');
+    if(inp) D.boards[bi].title=inp.value;
+    // sync each item's text fields from DOM
+    block.querySelectorAll('.place-card').forEach((card,ii)=>{
+      if(!D.boards[bi].items[ii]) return;
+      const ins=card.querySelectorAll('.pc-in');
+      if(ins[0]) D.boards[bi].items[ii].name=ins[0].value;
+      if(ins[1]) D.boards[bi].items[ii].desc=ins[1].value;
+      if(ins[2]) D.boards[bi].items[ii].badge=ins[2].value;
+      // imgPos already in D from confirmPos() — don't overwrite
+    });
+  });
+  // contact: sync text fields
+  document.querySelectorAll('#contactGrid .place-card').forEach((card,ii)=>{
+    if(!D.contact[ii]) return;
+    const ins=card.querySelectorAll('.pc-in');
+    if(ins[0]) D.contact[ii].name=ins[0].value;
+    if(ins[1]) D.contact[ii].desc=ins[1].value;
+    if(ins[2]) D.contact[ii].badge=ins[2].value;
+  });
   [['likeEd','likes'],['disEd','dislikes'],['hateEd','hates']].forEach(([e,k])=>{
     D[k]=[...document.querySelectorAll('#'+e+' input')].map(i=>i.value);
   });
