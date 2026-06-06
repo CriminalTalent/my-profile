@@ -886,7 +886,7 @@ function saveAll(){
 }
 function resetAll(){
   if(!confirm('모든 데이터를 초기화할까요?'))return;
-  localStorage.removeItem('pd2');localStorage.removeItem('kr_positions');
+  localStorage.removeItem('pd2');localStorage.removeItem('kr_positions');localStorage.removeItem('kr_positions_pct');
   D=loadData();loadForm();
 }
 function loadForm(){
