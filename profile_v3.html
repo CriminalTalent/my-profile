@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>자기소개</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Spectral:ital,wght@0,300;0,400;1,300&family=DM+Mono:ital,wght@0,300;1,300&family=Noto+Serif+KR:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f0eeea;--paper:#f7f5f1;--line:#dedad3;--ll:#eceae4;
+  --td:#1e1c18;--tm:#5c5850;--tu:#9c9890;--tf:#c4c0b8;--ac:#6b5f50;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--td);min-height:100vh;
+  font-family:'Noto Serif KR','Spectral',serif;font-weight:300;line-height:1.75;
+  overflow-x:hidden}
+
+/* ── 배경 이미지 레이어 ── */
+#bgLayer{position:fixed;inset:0;z-index:0;
+  background-size:cover;background-position:center;background-repeat:no-repeat;
+  transition:opacity .4s}
+.bg-fade{position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(170deg,
+    color-mix(in srgb,var(--bg) 55%,transparent) 0%,
+    color-mix(in srgb,var(--bg) 82%,transparent) 55%,
+    color-mix(in srgb,var(--bg) 96%,transparent) 100%)}
+
+/* ── 키링 레이어 ── */
+#keyringLayer{position:fixed;inset:0;z-index:3;pointer-events:none;overflow:hidden}
+.keyring{position:absolute;pointer-events:auto;cursor:grab;
+  display:flex;flex-direction:column;align-items:center;
+  user-select:none;-webkit-user-select:none;
+  filter:drop-shadow(0 4px 12px rgba(0,0,0,.18))}
+.keyring:active{cursor:grabbing}
+.keyring-string{width:2px;height:22px;
+  background:linear-gradient(to bottom,#b0a898,#d4cfc8);
+  border-radius:1px;margin-bottom:0;flex-shrink:0}
+.keyring-ring{width:14px;height:8px;border:2px solid #b0a898;
+  border-radius:50%;margin-bottom:2px;flex-shrink:0;
+  box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.keyring-img{display:block;object-fit:contain;
+  border-radius:4px;
+  animation:kr-sway 4s ease-in-out infinite}
+.keyring:nth-child(2n) .keyring-img{animation-delay:-1.3s;animation-duration:3.5s}
+.keyring:nth-child(3n) .keyring-img{animation-delay:-2.7s;animation-duration:5s}
+.keyring:nth-child(4n) .keyring-img{animation-delay:-.8s;animation-duration:4.5s}
+@keyframes kr-sway{
+  0%,100%{transform:rotate(-3deg)}
+  25%{transform:rotate(2deg)}
+  50%{transform:rotate(-1.5deg)}
+  75%{transform:rotate(3.5deg)}
+}
+.keyring.dragging .keyring-img{animation:none;transform:rotate(8deg);transition:transform .1s}
+
+/* ── 메인 ── */
+.wrap{position:relative;z-index:2;max-width:1080px;margin:0 auto;
+  padding:6rem 3rem 9rem;display:grid;grid-template-columns:260px 1fr;gap:0 4.5rem}
+.admin-btn{position:fixed;bottom:1.75rem;right:1.75rem;z-index:100;
+  font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.18em;
+  padding:5px 13px;border:1px solid var(--line);background:var(--paper);
+  color:var(--tf);text-decoration:none;opacity:.4;transition:opacity .25s}
+.admin-btn:hover{opacity:1}
+/* sidebar */
+.sb{grid-column:1;position:sticky;top:6rem;align-self:start}
+.av{width:100px;height:100px;border:1px solid var(--line);background:var(--paper);
+  margin-bottom:1.75rem;overflow:hidden;display:flex;align-items:center;
+  justify-content:center;font-size:2rem;color:var(--tf)}
+.av img{width:100%;height:100%;object-fit:cover;display:none}
+.sb-nick{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:500;
+  color:var(--td);line-height:1.1;margin-bottom:.3rem;letter-spacing:-.01em}
+.sb-handle{font-family:'DM Mono',monospace;font-size:.66rem;font-weight:300;
+  color:var(--tu);letter-spacing:.1em;margin-bottom:1rem}
+.sb-status{display:inline-block;padding:2px 9px;border:1px solid var(--line);
+  font-size:.68rem;color:var(--tm);letter-spacing:.05em;margin-bottom:2rem;background:var(--paper)}
+.sb-nav{display:flex;flex-direction:column;border-top:1px solid var(--line);padding-top:.1rem}
+.sb-nav a{display:flex;justify-content:space-between;align-items:center;
+  padding:.6rem 0;border-bottom:1px solid var(--ll);text-decoration:none;
+  font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.08em;
+  color:var(--tu);transition:color .15s}
+.sb-nav a:hover{color:var(--td)}
+.sb-footer{margin-top:2rem;font-family:'DM Mono',monospace;font-size:.6rem;
+  color:var(--tf);letter-spacing:.1em;line-height:1.9}
+/* main */
+.main{grid-column:2;min-width:0}
+.sec{margin-bottom:4.5rem;padding-bottom:4.5rem;border-bottom:1px solid var(--ll)}
+.sec:last-child{border-bottom:none;margin-bottom:0}
+.sec-label{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--tu);margin-bottom:1.75rem;
+  display:flex;align-items:center;gap:14px}
+.sec-label::before{content:'';width:16px;height:1px;background:currentColor;flex-shrink:0}
+.bio{font-family:'Noto Serif KR','Spectral',serif;font-weight:300;font-size:1.05rem;
+  line-height:2.05;color:var(--tm);max-width:500px;white-space:pre-line}
+/* board — card grid */
+.board{margin-bottom:3rem}.board:last-child{margin-bottom:0}
+.board-title{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:400;
+  color:var(--td);margin-bottom:1.25rem;padding-bottom:.6rem;
+  border-bottom:1px solid var(--line);letter-spacing:.02em}
+.blist{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:14px}
+.bitem{display:flex;flex-direction:column;background:var(--paper);
+  border:1px solid var(--ll);overflow:hidden;
+  transition:border-color .2s,transform .2s}
+.bitem:hover{border-color:var(--line);transform:translateY(-2px)}
+.bthumb{width:100%;aspect-ratio:3/4;background:var(--ll);overflow:hidden;
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:2rem;color:var(--tf);position:relative}
+.bthumb img{width:100%;height:100%;object-fit:cover;
+  transition:transform .35s ease}
+.bitem:hover .bthumb img{transform:scale(1.04)}
+.binfo{padding:.7rem .75rem .8rem;display:flex;flex-direction:column;gap:4px;flex:1}
+.bname{font-family:'Noto Serif KR','Spectral',serif;font-weight:400;
+  font-size:.88rem;color:var(--td);line-height:1.35}
+.bdesc{font-size:.75rem;color:var(--tu);line-height:1.5}
+.bbadge{font-family:'DM Mono',monospace;font-size:.56rem;letter-spacing:.07em;
+  padding:2px 7px;border:1px solid var(--line);color:var(--tu);
+  white-space:nowrap;align-self:flex-start;margin-top:auto;padding-top:6px}
+/* no-image bitem: horizontal fallback */
+.bitem.no-img{flex-direction:row;align-items:center;gap:.75rem;padding:.75rem}
+.bitem.no-img .bthumb{width:36px;height:36px;aspect-ratio:1/1;border-radius:3px;font-size:.9rem;flex-shrink:0}
+.bitem.no-img .binfo{padding:0}
+.bitem.no-img .bbadge{margin-top:0;padding-top:0}
+/* taste */
+.tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+.tcol-lbl{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.2em;
+  text-transform:uppercase;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--line)}
+.col-like .tcol-lbl{color:#6a8f6a}.col-dis .tcol-lbl{color:#8f7055}.col-hate .tcol-lbl{color:#8f5555}
+.tlist{list-style:none}
+.tlist li{font-size:.85rem;font-weight:300;color:var(--tm);padding:.4rem 0;
+  border-bottom:1px solid var(--ll);display:flex;align-items:baseline;gap:8px}
+.tlist li::before{font-family:'DM Mono',monospace;font-size:.58rem;flex-shrink:0}
+.col-like li::before{content:'+';color:#6a8f6a}.col-dis li::before{content:'−';color:#8f7055}.col-hate li::before{content:'×';color:#8f5555}
+/* meta */
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.mitem{padding:1.1rem 1.5rem 1.1rem 0;border-bottom:1px solid var(--ll)}
+.mkey{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--tf);margin-bottom:.35rem}
+.mval{font-family:'Noto Serif KR','Spectral',serif;font-weight:400;font-size:.95rem;color:var(--td)}
+/* mobile */
+@media(max-width:767px){
+  .wrap{display:block;padding:0}
+  .sb{position:static;padding:2.75rem 1.25rem 1.75rem;margin-bottom:2rem;
+    border-bottom:1px solid var(--line);display:grid;
+    grid-template-columns:68px 1fr;gap:0 1rem;align-items:start}
+  .av{grid-row:1/4;width:64px;height:64px;margin-bottom:0;font-size:1.4rem}
+  .sb-nick{grid-column:2;grid-row:1;font-size:1.5rem;align-self:end;margin-bottom:.1rem}
+  .sb-handle{grid-column:2;grid-row:2;margin-bottom:.3rem}
+  .sb-status{grid-column:2;grid-row:3;margin-bottom:0}
+  .sb-nav{grid-column:1/-1;flex-direction:row;overflow-x:auto;
+    border-top:none;margin-top:1.25rem;scrollbar-width:none;padding-top:0}
+  .sb-nav::-webkit-scrollbar{display:none}
+  .sb-nav a{flex-direction:column;align-items:flex-start;padding:.4rem 1.1rem .4rem 0;
+    border-bottom:none;border-right:1px solid var(--ll);white-space:nowrap;flex-shrink:0}
+  .sb-nav a:last-child{border-right:none}
+  .sb-footer{display:none}
+  .main{padding:0 1.25rem}
+  .sec{margin-bottom:2.75rem;padding-bottom:2.75rem}
+  .tgrid{grid-template-columns:1fr;gap:2rem}
+  .blist{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+  .mgrid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<div id="bgLayer"></div>
+<div class="bg-fade" id="bgFade"></div>
+<div id="keyringLayer"></div>
+<a class="admin-btn" href="admin.html">관리자 ›</a>
+
+<div class="wrap">
+  <aside class="sb">
+    <div class="av"><img id="avImg" alt=""><span id="avFb">○</span></div>
+    <div class="sb-nick" id="pNick"></div>
+    <div class="sb-handle" id="pHandle"></div>
+    <div class="sb-status" id="pStatus"></div>
+    <nav class="sb-nav" id="sbNav"></nav>
+    <div class="sb-footer" id="pLast"></div>
+  </aside>
+  <main class="main" id="mainContent"></main>
+</div>
+
+<script>
+
+const _DEF = {
+  nick:'닉네임', handle:'@handle', status:'활동중', lastEdit:'',
+  bio:'자기소개를 입력하세요.', avatar:'',
+  bgImage:'', bgOpacity:0.18,
+  keyrings:[],
+  theme:{bg:'#f0eeea',paper:'#f7f5f1',line:'#dedad3',
+         textDark:'#1e1c18',textMid:'#5c5850',textMuted:'#9c9890',
+         accent:'#6b5f50'},
+  boards:[
+    {id:'b1',title:'섹션 이름',items:[
+      {name:'항목 이름',desc:'설명',badge:'',img:''},
+      {name:'항목 이름',desc:'설명',badge:'',img:''}
+    ]}
+  ],
+  likes:['항목','항목','항목'],
+  dislikes:['항목','항목','항목'],
+  hates:['항목','항목'],
+  meta:[{key:'MBTI',val:'????'},{key:'나이대',val:'00년대'},
+        {key:'성별',val:'비공개'},{key:'지역',val:'비공개'},
+        {key:'활동 시간',val:'새벽형'},{key:'소통 온도',val:'자유'},
+        {key:'친밀도',val:'쉽게 친해짐'},{key:'RP 여부',val:'안함'}],
+  contact:[{name:'플랫폼',desc:'아이디 또는 링크',badge:'',img:''}]
+};
+function _clone(o){return JSON.parse(JSON.stringify(o));}
+function loadData(){
+  try{
+    const s=localStorage.getItem('pd2');
+    if(!s) return _clone(_DEF);
+    return Object.assign(_clone(_DEF), JSON.parse(s));
+  }catch(e){return _clone(_DEF);}
+}
+function saveData(d){localStorage.setItem('pd2',JSON.stringify(d));}
+function uid(){return 'b'+Date.now()+Math.random().toString(36).slice(2,6);}
+
+
+/* ── 테마 적용 ── */
+function applyTheme(d){
+  const r=document.documentElement.style,t=d.theme;
+  r.setProperty('--bg',t.bg);r.setProperty('--paper',t.paper);
+  r.setProperty('--line',t.line);r.setProperty('--td',t.textDark);
+  r.setProperty('--tm',t.textMid);r.setProperty('--tu',t.textMuted);
+  r.setProperty('--ac',t.accent);
+  const bg=document.getElementById('bgLayer');
+  if(d.bgImage){
+    bg.style.backgroundImage=`url('${d.bgImage}')`;
+    bg.style.opacity=d.bgOpacity??0.18;
+  } else {
+    bg.style.backgroundImage='none';
+    bg.style.opacity=0;
+  }
+  document.getElementById('bgFade').style.background=
+    `linear-gradient(170deg,color-mix(in srgb,${t.bg} 55%,transparent) 0%,color-mix(in srgb,${t.bg} 82%,transparent) 55%,color-mix(in srgb,${t.bg} 96%,transparent) 100%)`;
+}
+
+/* ── 키링 렌더 & 드래그 ── */
+const SAVED_POS_KEY='kr_positions';
+function loadPos(){try{return JSON.parse(localStorage.getItem(SAVED_POS_KEY))||{};}catch{return {};}}
+function savePos(p){localStorage.setItem(SAVED_POS_KEY,JSON.stringify(p));}
+
+function renderKeyrings(keyrings){
+  const layer=document.getElementById('keyringLayer');
+  const pos=loadPos();
+  layer.innerHTML='';
+  keyrings.forEach((kr,i)=>{
+    if(!kr.img) return;
+    const el=document.createElement('div');
+    el.className='keyring';
+    el.dataset.id=i;
+    const defaultX=20+((i*160)%(window.innerWidth-200));
+    const defaultY=60+(i%3)*180;
+    const p=pos[i]||{x:defaultX,y:defaultY};
+    el.style.cssText=`left:${p.x}px;top:${p.y}px`;
+    el.innerHTML=`
+      <div class="keyring-string"></div>
+      <div class="keyring-ring"></div>
+      <img class="keyring-img" src="${kr.img}" width="${kr.size||80}" alt="${kr.label||''}">
+      ${kr.label?`<div style="font-family:'DM Mono',monospace;font-size:.55rem;letter-spacing:.08em;color:var(--tu);margin-top:5px;text-align:center">${kr.label}</div>`:''}
+    `;
+    makeDraggable(el,i,pos);
+    layer.appendChild(el);
+  });
+}
+
+function makeDraggable(el,id,pos){
+  let ox=0,oy=0,mx=0,my=0,dragging=false;
+  const startDrag=e=>{
+    dragging=true;
+    el.classList.add('dragging');
+    const touch=e.touches?e.touches[0]:e;
+    ox=el.offsetLeft; oy=el.offsetTop;
+    mx=touch.clientX; my=touch.clientY;
+    e.preventDefault();
+  };
+  const moveDrag=e=>{
+    if(!dragging) return;
+    const touch=e.touches?e.touches[0]:e;
+    const dx=touch.clientX-mx, dy=touch.clientY-my;
+    const nx=Math.max(0,Math.min(window.innerWidth-el.offsetWidth,ox+dx));
+    const ny=Math.max(0,Math.min(window.innerHeight-el.offsetHeight,oy+dy));
+    el.style.left=nx+'px'; el.style.top=ny+'px';
+  };
+  const endDrag=e=>{
+    if(!dragging) return;
+    dragging=false;
+    el.classList.remove('dragging');
+    pos[id]={x:parseInt(el.style.left),y:parseInt(el.style.top)};
+    savePos(pos);
+  };
+  el.addEventListener('mousedown',startDrag);
+  el.addEventListener('touchstart',startDrag,{passive:false});
+  document.addEventListener('mousemove',moveDrag);
+  document.addEventListener('touchmove',moveDrag,{passive:false});
+  document.addEventListener('mouseup',endDrag);
+  document.addEventListener('touchend',endDrag);
+}
+
+/* ── 메인 렌더 ── */
+function render(){
+  const d=loadData(); applyTheme(d);
+  document.getElementById('pNick').textContent=d.nick;
+  document.getElementById('pHandle').textContent=d.handle;
+  document.getElementById('pStatus').textContent=d.status;
+  document.getElementById('pLast').textContent=d.lastEdit?'수정 '+d.lastEdit:'';
+  const av=document.getElementById('avImg'),fb=document.getElementById('avFb');
+  if(d.avatar){av.src=d.avatar;av.style.display='block';fb.style.display='none';}
+  else{av.style.display='none';fb.style.display='';}
+
+  const nav=document.getElementById('sbNav');
+  const secs=[['about','자기소개'],...d.boards.map(b=>[b.id,b.title]),
+    ['taste','취향'],['meta','기타'],['contact','연락']];
+  nav.innerHTML=secs.map(([id,lbl])=>
+    `<a href="#${id}">${lbl}<span style="font-size:.55rem;color:var(--tf);margin-left:4px">↓</span></a>`).join('');
+
+  const main=document.getElementById('mainContent');
+  let html=`<section class="sec" id="about">
+    <div class="sec-label">자기소개</div>
+    <p class="bio">${d.bio}</p>
+  </section>`;
+  d.boards.forEach(b=>{
+    html+=`<section class="sec" id="${b.id}">
+      <div class="sec-label">${b.title}</div>
+      <div class="blist">${b.items.map(it=>{const p=it.imgPos||{x:50,y:50,z:100};return it.img?`
+        <div class="bitem">
+          <div class="bthumb"><img src="${it.img}" alt="${it.name}" style="object-position:${p.x}% ${p.y}%;transform:scale(${p.z/100})"></div>
+          <div class="binfo">
+            <div class="bname">${it.name}</div>
+            ${it.desc?`<div class="bdesc">${it.desc}</div>`:''}
+            ${it.badge?`<div class="bbadge">${it.badge}</div>`:''}
+          </div>
+        </div>`:`
+        <div class="bitem no-img">
+          <div class="bthumb">○</div>
+          <div class="binfo">
+            <div class="bname">${it.name}</div>
+            ${it.desc?`<div class="bdesc">${it.desc}</div>`:''}
+          </div>
+          ${it.badge?`<div class="bbadge">${it.badge}</div>`:''}
+        </div>`;}).join('')}</div>
+    </section>`;
+  });
+  html+=`
+  <section class="sec" id="taste">
+    <div class="sec-label">취향표</div>
+    <div class="tgrid">
+      <div class="tcol col-like"><div class="tcol-lbl">좋아하는 것</div>
+        <ul class="tlist">${d.likes.map(v=>`<li>${v}</li>`).join('')}</ul></div>
+      <div class="tcol col-dis"><div class="tcol-lbl">싫어하는 것</div>
+        <ul class="tlist">${d.dislikes.map(v=>`<li>${v}</li>`).join('')}</ul></div>
+      <div class="tcol col-hate"><div class="tcol-lbl">극도로 불호</div>
+        <ul class="tlist">${d.hates.map(v=>`<li>${v}</li>`).join('')}</ul></div>
+    </div>
+  </section>
+  <section class="sec" id="meta">
+    <div class="sec-label">기타 정보</div>
+    <div class="mgrid">${d.meta.map(m=>`
+      <div class="mitem"><div class="mkey">${m.key}</div>
+      <div class="mval">${m.val}</div></div>`).join('')}</div>
+  </section>
+  <section class="sec" id="contact">
+    <div class="sec-label">연락처</div>
+    <div class="blist">${d.contact.map(it=>{const p=it.imgPos||{x:50,y:50,z:100};return it.img?`
+      <div class="bitem">
+        <div class="bthumb"><img src="${it.img}" alt="${it.name}" style="object-position:${p.x}% ${p.y}%;transform:scale(${p.z/100})"></div>
+        <div class="binfo">
+          <div class="bname">${it.name}</div>
+          ${it.desc?`<div class="bdesc">${it.desc}</div>`:''}
+          ${it.badge?`<div class="bbadge">${it.badge}</div>`:''}
+        </div>
+      </div>`:`
+      <div class="bitem no-img">
+        <div class="bthumb">○</div>
+        <div class="binfo">
+          <div class="bname">${it.name}</div>
+          ${it.desc?`<div class="bdesc">${it.desc}</div>`:''}
+        </div>
+        ${it.badge?`<div class="bbadge">${it.badge}</div>`:''}
+      </div>`;}).join('')}</div>
+  </section>`;
+  main.innerHTML=html;
+
+  renderKeyrings(d.keyrings||[]);
+}
+render();
+window.addEventListener('storage',render);
+</script>
+</body>
+</html>
